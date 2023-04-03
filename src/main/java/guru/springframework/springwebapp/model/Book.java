@@ -3,13 +3,7 @@ package guru.springframework.springwebapp.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Book {
@@ -19,7 +13,8 @@ public class Book {
     private Long id;
     private String title;
     private String isbn;
-    private String publisher;
+    @OneToOne
+    private Publisher publisher;
 
     @ManyToMany
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name="author_id"))
@@ -28,13 +23,19 @@ public class Book {
     public Book() {
 
     }
-    public Book(String title, String isbn, String publisher){
+
+    public Book(String title, String isbn){
+        this.title = title;
+        this.isbn = isbn;        
+    }
+
+    public Book(String title, String isbn, Publisher publisher){
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String publisher, Set<Author> authors){
+    public Book(String title, String isbn, Publisher publisher, Set<Author> authors){
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -51,8 +52,8 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getPublisher() {return publisher;}
-    public void setPublisher(String publisher){
+    public Publisher getPublisher() {return publisher;}
+    public void setPublisher(Publisher publisher){
         this.publisher = publisher;
     }
 
